@@ -58,7 +58,7 @@ else:
 	if fileCore=='default':
 		fileCore = inputFile
 	inputBED = FM.readbed(inputFile)
-
+#sys.exit(0)
 
 ##### TEST #####
 #for key in inputBED.keys():
@@ -98,7 +98,7 @@ def writeUTR(UTR, fileCore):
 if outputSmoothed == 1:
 	writeUTR(estimatedUTR1, fileCore+"."+methods+".smoothed.bed")
 print 'done'
-sys.exit(0)
+#sys.exit(0)
 
 #Traceback (most recent call last):
 #  File "GETUTR.py", line 94, in <module>

@@ -42,9 +42,9 @@ def get_geneIntervals(geneAnno):
 					predistance = g[0]-preEnd[i-1]+1
 					g.append(predistance)
 
-					ngenes.append(g)
-					if g[2].sense()=='-':  preEnd.append(g[1])
-					geneAnno2[g[2].geneID()]=[g[2], g[-1]]
+				ngenes.append(g)
+				if g[2].sense()=='-':  preEnd.append(g[1])
+				geneAnno2[g[2].geneID()]=[g[2], g[-1]]
 	return geneAnno2
 
 #def senseDetection(list):
@@ -166,7 +166,8 @@ def getPos(RNA, locus):
 				for rna in RNA[chr][i]:
 					if rna[0]<=end and start<=rna[1]:
 						#print rna[0], rna[1], rna[2], rna[3], rna[4]
-						ret.append(rna)
+						if sense==rna[2]:
+							ret.append(rna)
 	return ret
 
 def add(list, sub):
@@ -274,8 +275,8 @@ def sAlgorithm(txExons, inputBED, utrstart=0, method='PAVA', density_kernel='gau
 			usageRatio, usageRaw = makeSmoothed(smoothedValue, utrstart, utrLen, chr, sense, method)# method='maxStart' or 'neverLower'
 			for usage in usageRatio:
 				if mpos2.has_key(usage[1]) and mpos2.has_key(usage[2]):
-					usage[1]=mpos2[usage[1]]
-					usage[2]=mpos2[usage[2]]
+					usage[1] = mpos2[usage[1]]
+					usage[2] = mpos2[usage[2]]
 					newUsages.append(usage)
 
 	return newUsages
@@ -347,6 +348,8 @@ def makeSmoothed(smoothedValue, utrstart, utrLen, chr, sense, method):
 				if sense=='+':
 					utrRaw.reverse()
 					utrValue.reverse()
+				utrRaw.reverse()
+				utrValue.reverse()
 		if sense=='+':
 			utrRaw[0][1] = utrstart-1
 			utrValue[0][1] = utrstart
