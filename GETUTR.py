@@ -2,7 +2,7 @@ from rpy import *
 from types import *
 import numpy
 import random
-import annotationImporter as Anno
+import annotationImporter_min as Anno
 import sys
 
 import filemanager as FM
@@ -128,3 +128,4 @@ if outputCleavage == 1:
 		for item in estimatedUTR2[geneid]:
 			fout.write(str(item[0])+"\t"+str(item[1])+"\t"+str(item[2])+"\t"+str(item[3])+"\t"+str(item[4])+"\n")
 	fout.close()
+

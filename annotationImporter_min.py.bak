@@ -50,7 +50,7 @@ def getRefFlatbyChromUniq(genomeName, test = lambda g: True):
         genes = geneAnnobyChrom.get(chrom,[])
         for gene in genes: geneAnno[gene[2].name()]=gene[2]
     for genename in geneAnno.keys():
-	geneAnnoChrom[geneAnno[geneID].chr()].append(geneAnno[genename])
+	geneAnnoChrom[geneAnno[genename].chr()].append(geneAnno[genename])
     return geneAnnoChrom
 
 def getNewRefFlatUniq(genomeName, method, tpSeqSample, test = lambda g: True):
@@ -108,7 +108,7 @@ def getRefFlat(genomeName, key='symbol', test = lambda g: True):
     genomeToFile=dict()
     genomeToFile['ce6'] = '/lab/bartel3_ata/jwnam/c.elgans_may_2008/annotation/refFlat.txt'
     genomeToFile['hg18_distinct'] = '/lab/bartel3_ata/jwnam/h.sapiens/nature_refSeq_distinct.fa'
-    genomeToFile['hg19'] = '/lab/bartel3_ata/jwnam/h.sapiens/hg19/refFlat.txt'
+    genomeToFile['hg19'] = '/home/jwnam/WI/bartel3_ata/jwnam/h.sapiens/hg19/refFlat.txt'
     genomeToFile['GRCh37.66'] = '/lab/bartel3_ata/jwnam/h.sapiens/hg19/GRCh37.66.genePred2'
     genomeToFile['danRer6'] = '/lab/bartel3_ata/jwnam/zebrafish/refFlat.txt'
     genomeToFile['danRer7'] = '/lab/bartel3_ata/jwnam/zebrafish/danRer7/refFlat.txt'
@@ -162,7 +162,7 @@ def getRefFlat2(filename,test = lambda g: True):
     genomeToFile['danRer6'] = '/lab/bartel3_ata/jwnam/zebrafish/refFlat.txt'
     genomeToFile['danRer7'] = '/lab/bartel3_ata/jwnam/zebrafish/danRer7/refFlat.txt'
     genomeToFile['hg18_distinct'] = '/lab/bartel3_ata/jwnam/h.sapiens/nature_refSeq_distinct.fa'
-    genomeToFile['hg19'] = '/lab/bartel3_ata/jwnam/h.sapiens/hg19/refFlat.txt'
+    genomeToFile['hg19'] = '/home/jwnam/WI/bartel3_ata/jwnam/h.sapiens/hg19/refFlat.txt'
     genomeToFile['GRCh37.66'] = '/lab/bartel3_ata/jwnam/h.sapiens/hg19/GRCh37.66.genePred2'
     genomeToFile['sangerRna'] = '/lab/bartel3_ata/jwnam/c.elgans_may_2008/annotation/sangerRnaGene.txt'
     genomeToFile['sangerPseudogene'] = '/lab/bartel3_ata/jwnam/c.elgans_may_2008/annotation/sangerPseudoGene.txt'
@@ -197,7 +197,7 @@ def getRefFlat2(filename,test = lambda g: True):
 def getRefFlatbyChrom(genomeName,test = lambda g: True):
     genomeToFile=dict()
     genomeToFile['hg18'] = '/lab/bartel3_ata/jwnam/h.sapiens/refFlat.txt'
-    genomeToFile['hg19'] = '/lab/bartel3_ata/jwnam/h.sapiens/hg19/refFlat.txt'
+    genomeToFile['hg19'] = '/home/jwnam/WI/bartel3_ata/jwnam/h.sapiens/hg19/refFlat.txt'
     genomeToFile['GRCh37.66'] = '/lab/bartel3_ata/jwnam/h.sapiens/hg19/GRCh37.66.genePred2'
     genomeToFile['ce6'] = '/lab/bartel3_ata/jwnam/c.elgans_may_2008/annotation/refFlat.txt'
     genomeToFile['dm3'] = '/lab/bartel3_ata/jwnam/d.melanogaster/annotation/refFlat.txt'
@@ -246,14 +246,14 @@ def get_new3UTR(assembly, method, tpSeqSample):
     newUTR=dict()
     new3UTRD=dict()
     newUTR['ce6'] = '/lab/bartel1_ata/jwnam/Project/Celegans/3UTR/new3UTRcoord.txt'
-    newUTR['hg19'] = '/lab/bartel1_ata/jwnam/Project/Human/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_All.txt'
-    newUTR['GRCh37.66'] = '/lab/bartel1_ata/jwnam/Project/Human/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_All.txt'
+    newUTR['hg19'] = '/lab/bartel1_ata/jwnam/Project/Human/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_Calvin_All.txt'
+    newUTR['GRCh37.66'] = '/lab/bartel1_ata/jwnam/Project/Human/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_Calvin_All.txt'
     #newUTR['hg19'] = '/lab/bartel1_ata/jwnam/Project/Human/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_Merk_L3UTR_All.txt'
     newUTR['dm3'] = '/lab/bartel1_ata/jwnam/Project/Fly/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_All.txt'
     newUTR['mm9'] = '/lab/bartel1_ata/jwnam/Project/Mouse/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_Calvin_All.txt'
     #newUTR['mm9'] = '/lab/bartel1_ata/jwnam/Project/Mouse/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_All.txt'
     #newUTR['mm9'] = '/lab/bartel1_ata/jwnam/Project/Mouse/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_Merk_L3UTR_All.txt'
-    newUTR['danRer7'] = '/lab/bartel1_ata/jwnam/Project/Zebrafish/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_All.txt'
+    newUTR['danRer7'] = '/lab/bartel1_ata/jwnam/Project/Zebrafish/DifferentialTargets/Apps/3PSeq/3PSeq_Signals_Across_Samples_15_L3UTR_Calvin_All.txt'
     if newUTR.has_key(assembly):
     	file = open(newUTR[assembly])
     	lines = file.readlines(); file.close()

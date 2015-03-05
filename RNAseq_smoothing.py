@@ -3,8 +3,8 @@ import sys
 import math
 import random
 import regression as RGR
-import utilityModule as util
-import annotationImporter as Anno
+import utilityModule_min as util
+import annotationImporter_min as Anno
 
 
 def get_geneIntervals(geneAnno):
