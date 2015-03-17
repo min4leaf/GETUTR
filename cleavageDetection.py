@@ -82,37 +82,46 @@ def makeSeq(UTR, cleavage):
 			if len(cleavage[geneid])>0 and len(UTR[geneid])>0:
 				chr = cleavage[geneid][0][0]
 				sense = cleavage[geneid][0][1]
-				ptr = 0
+				if sense=='+':
+					ptr = 0
+				else:
+					ptr = len(UTR[geneid])-1
 				maxLength = -1
 				maxPtr = -1
 				for i in xrange(len(cleavage[geneid])):
 					maxLength = -1
 					if sense=='+':
-						ptr = 0
-						while UTR[geneid][ptr][2]<cleavage[geneid][i][2]:
+						while UTR[geneid][ptr][2]<=cleavage[geneid][i][2]:
 							if abs(UTR[geneid][ptr][2] - UTR[geneid][ptr][1])>maxLength:
 								maxLength = abs(UTR[geneid][ptr][2] - UTR[geneid][ptr][1])
 								maxPtr = ptr
-							ptr += 1
+							if ptr==len(UTR[geneid])-1:
+								break
+							else:
+								ptr += 1
 						cleavage[geneid][i][3] = UTR[geneid][maxPtr][3]
 					else:
-						ptr = len(UTR[geneid])-1
-						while cleavage[geneid][-i-1][2]<UTR[geneid][ptr][1]:
+						while cleavage[geneid][-i-1][2]<=UTR[geneid][ptr][1]:
 							if abs(UTR[geneid][ptr][2] - UTR[geneid][ptr][1])>maxLength:
 								maxLength = abs(UTR[geneid][ptr][2] - UTR[geneid][ptr][1])
 								maxPtr = ptr
-							ptr -= 1
+							if ptr==0:
+								break
+							else:
+								ptr -= 1
 						cleavage[geneid][-i-1][3] = UTR[geneid][maxPtr][3]
 				if sense=='+':
 					if cleavage[geneid][0][3]!=1:
 						for i in xrange(1,len(cleavage[geneid])+1):
 							cleavage[geneid][-i][3] /= cleavage[geneid][0][3]
+						#cleavage[geneid][0][3] = 1
 					for i in xrange(len(cleavage[geneid])-1):
 						cleavage[geneid][i][3] -= cleavage[geneid][i+1][3]
 				else:
 					if cleavage[geneid][-1][3]!=1:
 						for i in xrange(0,len(cleavage[geneid])):
 							cleavage[geneid][i][3] /= cleavage[geneid][-1][3]
+						#cleavage[geneid][-1][3] = 1
 					for i in xrange(1, len(cleavage[geneid])):
 						cleavage[geneid][-i][3] -= cleavage[geneid][-i-1][3]
 				
@@ -134,5 +143,5 @@ def makeSeq(UTR, cleavage):
 						end = cleavage[geneid][i+1][2]
 						value += cleavage[geneid][i][3]
 						nUTR[geneid].append([chr, start, end, value, sense])
-					nUTR[geneid].append([chr, sense, cleavage[geneid][-1][2], UTR[geneid][-1][2], 1.0])
+					nUTR[geneid].append([chr, cleavage[geneid][-1][2], UTR[geneid][-1][2], 1.0, sense])
 	return nUTR, cleavage

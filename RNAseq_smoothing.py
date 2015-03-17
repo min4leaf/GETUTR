@@ -150,7 +150,7 @@ def len_dict(dic):
 		length += len(dic[key])
 	return length
 
-def getPos(RNA, locus):
+def getPos(RNA, locus, maxLeng):
 	#
 	#
 	ret = []
@@ -158,7 +158,7 @@ def getPos(RNA, locus):
 	sense = locus.sense()
 	start = locus.start()
 	end = locus.end()
-	startKey = int(start/10000)
+	startKey = int((start-maxLeng)/10000)
 	endKey = int(end/10000)
 	if RNA.has_key(chr):
 		for i in xrange(startKey, endKey+1):
@@ -175,7 +175,7 @@ def add(list, sub):
 		list.append(sub[i])
 	return list
 
-def smoothing(inputBED, method='PAVA'):
+def smoothing(inputBED, maxLeng, method='PAVA'):
 	# input::
 	# list inputBED = [start, end, sense, qual, tag]
 	# string method 
@@ -193,8 +193,6 @@ def smoothing(inputBED, method='PAVA'):
 	
 	for gene, interval in geneAnno.values():
 		geneid = gene.geneID()
-		print geneid
-		#chr = gene.chr()
 		if geneid[:2]!='NR':
 			interval = min(interval, 3000)
 			beforeUTR = gene.fpExons(gene.sense()) + gene.cdExons()
@@ -204,27 +202,21 @@ def smoothing(inputBED, method='PAVA'):
 				txExon[-1] = util.Locus(gene.chr(), txExon[-1].start(), txExon[-1].end()+interval, '+')
 			else:
 				txExon[0] = util.Locus(gene.chr(), txExon[0].start()-interval, txExon[0].end(), '-')
-			print geneid
 			usageRatio = []
-			#if geneid=='NM_001038633':
-			#	sys.exit(0)
-			#print txExon[0].start(), txExon[-1].end()
-			usageRatio = sAlgorithm(txExon, inputBED, beforeUTRLen+1, method)
-			#	sys.exit(0)
+			usageRatio = sAlgorithm(txExon, inputBED, maxLeng, beforeUTRLen+1, method)
 			usageRatioD[geneid] = usageRatio
 
 	return usageRatioD
 
-def sAlgorithm(txExons, inputBED, utrstart=0, method='PAVA', density_kernel='gaussian'):
+def sAlgorithm(txExons, inputBED, maxLeng, utrstart=0, method='PAVA', density_kernel='gaussian'):
 	res=[]; resTemp=[]; resPosA=[]; mpos=dict(); mpos2=dict()
 	chr = txExons[0].chr()
 	sense = txExons[0].sense()
 	if sense=='+':
 		rp=0
 		for tx in txExons:
-			print tx
-			#res += SM.getBam(bamfile, locus, 'sp')#; print locus,
-			Pos = getPos(inputBED, tx)
+			#print tx
+			Pos = getPos(inputBED, tx, maxLeng)
 			resTemp = add(res, Pos)
 			res = resTemp
 			for i in range(tx.start(), tx.end()+1):
@@ -234,9 +226,9 @@ def sAlgorithm(txExons, inputBED, utrstart=0, method='PAVA', density_kernel='gau
 	elif sense=='-':
 		rp = sum(map(lambda x: x.len(), txExons))-1
 		for tx in txExons: 
-			print tx
+			#print tx
 			#res += SM.getBam(bamfile, locus, 'sp')#; print locus,
-			Pos = getPos(inputBED, tx)
+			Pos = getPos(inputBED, tx, maxLeng)
 			resTemp = add(res, Pos)
 			res = resTemp
 			for i in range(tx.start(), tx.end()+1):
@@ -344,12 +336,11 @@ def makeSmoothed(smoothedValue, utrstart, utrLen, chr, sense, method):
 				for i in xrange(len(utrRaw)):
 					criterion = min(criterion, utrRaw[i][3])
 					utrRaw[i][3] = criterion
-					utrValue.append([chr, utrRaw[i][1], utrRaw[i][2], float(utrRaw[i][3]/maxValue), utrRaw[i][4]])
-				if sense=='+':
+					if criterion!=0:
+						utrValue.append([chr, utrRaw[i][1], utrRaw[i][2], float(utrRaw[i][3]/maxValue), utrRaw[i][4]])
+				if sense=='-':
 					utrRaw.reverse()
 					utrValue.reverse()
-				utrRaw.reverse()
-				utrValue.reverse()
 		if sense=='+':
 			utrRaw[0][1] = utrstart-1
 			utrValue[0][1] = utrstart

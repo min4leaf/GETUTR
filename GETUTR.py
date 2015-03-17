@@ -48,8 +48,8 @@ else:
 if inputFile[-3:]=='bam' or inputFile[-3:]=='BAM':
 	if fileCore=='default':
 		fileCore = inputFile[:-3]
-	inputBED = FM.bamtobed(inputFile)
-	#inputBED = FM.readbam(inputFile)
+	inputBED, maxLeng = FM.bamtobed(inputFile)
+	#inputBED, maxLeng = FM.readbam(inputFile)
 elif inputFile[-3:]=='bed' or inputFile[-3:]=='BED':
 	if fileCore=='default':
 		fileCore = inputFile[:-3]
@@ -70,7 +70,7 @@ else:
 #		for i in inputBED[key][key2]:
 #			print key2, i[0]
 #sys.exit(0)
-estimatedUTR1 = smooth.smoothing(inputBED, methods)
+estimatedUTR1 = smooth.smoothing(inputBED, maxLeng, methods)
 
 def writeUTR(UTR, fileCore):
 	#track type=wiggle_0 name="HeLa_124_ratio_+_max" description="HeLa_124_ratio_+_max"
@@ -95,8 +95,21 @@ def writeUTR(UTR, fileCore):
 				##print chrom, '\t'.join(usage)
 	fout.close()
 
+
 if outputSmoothed == 1:
-	writeUTR(estimatedUTR1, fileCore+"."+methods+".smoothed.bed")
+	#writeUTR(estimatedUTR1, fileCore+"."+methods+".smoothed.bed")
+	fout = open(fileCore+"."+methods+".smoothed.bed", "w")
+	for geneid in estimatedUTR1.keys():
+		usages = estimatedUTR1[geneid]
+		if len(usages)>0:
+			fout.write('track type=wiggle_0 name=\"' + geneid + '\" description=\"' + geneid + '\"\n')
+			for usage in usages:
+				maxv = max(usage[1:3])
+				minv = min(usage[1:3])
+				usage[1] = minv
+				usage[2] = maxv
+				usage = map(str,usage)
+				fout.write('\t'.join(usage) + '\n')
 print 'done'
 #sys.exit(0)
 
@@ -117,15 +130,23 @@ print 'done'
 #sys.exit(0)
 
 if outputCleavage == 1:
-	fout = open(fileCore+"."+methods+"_PCS", "w")
+	fout = open(fileCore+"."+methods+".PCS", "w")
 	for geneid in PCS.keys():
-		for item in PCS[geneid]:
-			fout.write(str(item[0])+"\t"+str(item[1])+"\t"+str(item[2])+"\t"+str(item[3])+"\n")
+		if len(PCS[geneid])>0:
+			fout.write('track type=wiggle_0 name=\"' + geneid + '\" description=\"' + geneid + '\"\n')
+			for item in PCS[geneid]:
+				item = map(str,item)
+				fout.write('\t'.join(item) + '\n')
+				#fout.write(str(item[0])+"\t"+str(item[1])+"\t"+str(item[2])+"\t"+str(item[3])+"\n")
 	fout.close()
 	
-	fout = open(fileCore+"."+methods+"_UTR", "w")
+	fout = open(fileCore+"."+methods+".UTR", "w")
 	for geneid in estimatedUTR2.keys():
-		for item in estimatedUTR2[geneid]:
-			fout.write(str(item[0])+"\t"+str(item[1])+"\t"+str(item[2])+"\t"+str(item[3])+"\t"+str(item[4])+"\n")
+		if len(estimatedUTR2[geneid])>0:
+			fout.write('track type=wiggle_0 name=\"' + geneid + '\" description=\"' + geneid + '\"\n')
+			for item in estimatedUTR2[geneid]:
+				item = map(str,item)
+				fout.write('\t'.join(item) + '\n')
+				#fout.write(str(item[0])+"\t"+str(item[1])+"\t"+str(item[2])+"\t"+str(item[3])+"\t"+str(item[4])+"\n")
 	fout.close()
 
